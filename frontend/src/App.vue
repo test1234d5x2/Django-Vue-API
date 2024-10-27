@@ -36,15 +36,29 @@
   </template>
   
 <script>
-export default {
-    data() {
-        return {
-            response_data: '',
+
+    const BASE_URL = "http://localhost:8000/api"
+
+    export default {
+
+        data() {
+            return {
+                response_data: '',
+            }
+        },
+        async mounted() {
+            const response = await fetch(`${BASE_URL}/allElements`)
+            this.response_data = await response.json()
+
+            const response2 = await fetch(`${BASE_URL}/addData/employee`, {
+                method: "POST",
+                body: JSON.stringify({
+                    "name": "name",
+                    "surname": "surname",
+                    "background": "a description",
+                    "is_working": true
+                })
+            })
         }
-    },
-    async mounted() {
-        const response = await fetch('http://localhost:8000/api/test.json')
-        this.response_data = await response.json()
     }
-}
 </script>

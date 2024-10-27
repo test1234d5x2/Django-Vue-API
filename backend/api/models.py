@@ -5,7 +5,7 @@ class Employee(models.Model):
     name = models.CharField(max_length=30)
     surname = models.CharField(max_length=30)
     background = models.TextField()
-    is_working = models.BooleanField(default=True)
+    is_working = models.BooleanField()
 
     def __str__(self):
         return f"{self.name} {self.surname}"

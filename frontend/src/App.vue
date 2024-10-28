@@ -1,7 +1,7 @@
 <template>
     <div class="container pt-3">
         <div class="h1 text-center border rounded bg-light p-2 mb-3">
-            API Client
+            Project Assigner
         </div>
         <div class="mb-3">
             <u>Response data</u>:             
@@ -49,16 +49,19 @@
         async mounted() {
             const response = await fetch(`${BASE_URL}/allElements`)
             this.response_data = await response.json()
-
-            const response2 = await fetch(`${BASE_URL}/addData/employee`, {
-                method: "POST",
-                body: JSON.stringify({
-                    "name": "name",
-                    "surname": "surname",
-                    "background": "a description",
-                    "is_working": true
-                })
-            })
         }
     }
 </script>
+
+
+/** Adding Data
+ * await fetch(`${BASE_URL}/addData/employee`, {
+    method: "POST",
+    body: JSON.stringify({
+        "name": "name",
+        "surname": "surname",
+        "background": "a description",
+        "is_working": true
+    })
+})
+ */

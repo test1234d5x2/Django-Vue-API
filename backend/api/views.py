@@ -1,7 +1,9 @@
 import json
+from django.core.exceptions import FieldDoesNotExist
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.db import models
+from django.forms.models import model_to_dict
 
 from .models import Project, Employee, Assignment
 
@@ -32,15 +34,21 @@ def add_data(request, type):
     newData = json.loads(request.body)
     model = get_model(type)
     
-    for key in newData.keys():
-        if key not in model._meta.get_fields():
-            return incorrect_form_fields_message()
+    try:
+
+        for key in newData.keys():
+            print(model._meta.get_field(key))
+
+    except FieldDoesNotExist:
+        print("Entered here")
+        return incorrect_form_fields_message()
         
-    newData = model.objects.create(**model)
+    newData = model.objects.create(**newData)
+    newData.save()
 
     return JsonResponse({
         "type": type,
-        "data": newData,
+        "data": model_to_dict(newData),
     })
 
 

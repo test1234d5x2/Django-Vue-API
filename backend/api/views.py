@@ -22,7 +22,7 @@ TYPE_MODEL_MAPPING = {
 
 
 def list_models(request):
-    return JsonResponse({"data": TYPE_MODEL_MAPPING.keys()})
+    return JsonResponse({"data": list(TYPE_MODEL_MAPPING.keys())})
 
 
 def assignment_api(request, assignment_id):

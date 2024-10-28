@@ -34,9 +34,7 @@ def add_data(request, type):
     
     for key in newData.keys():
         if key not in model._meta.get_fields():
-            return JsonResponse({
-                "message": "Incorrect set of form fields."
-            })
+            return incorrect_form_fields_message()
         
     newData = model.objects.create(**model)
 
@@ -71,6 +69,17 @@ def update_data(request, type, id):
     if request.method != "PUT":
         return invalid_request_message()
 
+    updatedData = json.loads(request.body)
+    model = get_model(type)
+
+    for key in updatedData.keys():
+        if key not in model._meta.get_fields():
+            return incorrect_form_fields_message()
+        
+    oldData = model.objects.get(id=id)
+    
+    # TODO: UPDATE THE DATA.
+
     return JsonResponse({
         "message": "Working"
     })
@@ -82,8 +91,17 @@ def invalid_request_message():
     })
 
 
+def incorrect_form_fields_message():
+    return JsonResponse({
+        "message": "Incorrect set of form fields."
+    })
+
+
+
+
+
 def get_model(type) -> models.Model:
     if type not in TYPE_MODEL_MAPPING.keys():
-        return None
+        return models.Exi
     
     return TYPE_MODEL_MAPPING[type]

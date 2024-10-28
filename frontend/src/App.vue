@@ -69,7 +69,20 @@
 
 
  /** Deleting Data
-  * const response2 = await fetch(`${BASE_URL}/employeeAPI/1`, {
+  * await fetch(`${BASE_URL}/employeeAPI/{employee_id}`, {
         method: "DELETE",
     })
   */
+
+
+/** Updating Data
+ * await fetch(`${BASE_URL}/employeeAPI/{employee_id}`, {
+    method: "PUT",,
+    body: JSON.stringify({
+        "name": "name",
+        "surname": "surname",
+        "background": "a description",
+        "is_working": true
+    })
+})
+ */

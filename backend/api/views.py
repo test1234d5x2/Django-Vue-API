@@ -55,27 +55,7 @@ def employee_api(request, id):
 
 
 
-
-def invalid_request_message():
-    return JsonResponse({
-        "message": "Request method is invalid"
-    })
-
-
 def incorrect_form_fields_message():
     return JsonResponse({
         "message": "Incorrect set of form fields."
     })
-
-
-def model_not_found():
-    return JsonResponse({
-        "message": "Data type not found."
-    })
-
-
-def get_model(type) -> models.Model:
-    if type not in TYPE_MODEL_MAPPING.keys():
-        return None
-    
-    return TYPE_MODEL_MAPPING[type]

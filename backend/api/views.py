@@ -6,11 +6,23 @@ from django.forms.models import model_to_dict
 
 from .models import Project, Employee, Assignment
 
+
+
+
+
+
+
 TYPE_MODEL_MAPPING = {
     "project": Project,
     "employee": Employee,
     "assignment": Assignment,
 }
+
+
+
+
+def list_models(request):
+    return JsonResponse({"data": TYPE_MODEL_MAPPING.keys()})
 
 
 def assignment_api(request, assignment_id):

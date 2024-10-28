@@ -49,21 +49,19 @@
         async mounted() {
             const response = await fetch(`${BASE_URL}/employeesAPI`)
             this.response_data = await response.json()
-
-            const response2 = await fetch(`${BASE_URL}/employeesAPI`, {
-                method: "POST",
-                body: JSON.stringify({
-                    "name": "name",
-                    "surname": "surname",
-                    "background": "a description",
-                    "is_working": true
-                })
-            })
         }
     }
 </script>
 
 
 /** Adding Data
- * 
+ * await fetch(`${BASE_URL}/employeesAPI`, {
+    method: "POST",
+    body: JSON.stringify({
+        "name": "name",
+        "surname": "surname",
+        "background": "a description",
+        "is_working": true
+    })
+})
  */

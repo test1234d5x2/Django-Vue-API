@@ -3,18 +3,24 @@
         <div class="h1 text-center border rounded bg-light p-2 mb-3">
             Project Assigner
         </div>
-        <div class="mb-3">
-            <u>Response data</u>:             
-        </div>
-        <pre>{{ response_data }}</pre>
+
+        <ul class="nav nav-tabs">
+
+            <li class="nav-item" v-for="(model, index) in models_list['data']">
+                <a class="nav-link" aria-current="page" href="#" v-if="index !== 0">{{ String(model).charAt(0).toUpperCase() + String(model).slice(1).toLowerCase() }}</a>
+                <a class="nav-link active" aria-current="page" href="#" v-else>{{ String(model).charAt(0).toUpperCase() + String(model).slice(1).toLowerCase() }}</a>
+            </li>
+        </ul>
+
+
 
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
         Launch demo modal
-        </button>
+        </button> -->
 
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
@@ -30,7 +36,7 @@
             </div>
             </div>
         </div>
-        </div>
+        </div> -->
 
     </div>
   </template>
@@ -43,12 +49,12 @@
 
         data() {
             return {
-                response_data: '',
+                models_list: '',
             }
         },
         async mounted() {
-            const response = await fetch(`${BASE_URL}/employeesAPI`)
-            this.response_data = await response.json()
+            const response = await fetch(`${BASE_URL}/listTypes`)
+            this.models_list = await response.json()
         }
     }
 </script>

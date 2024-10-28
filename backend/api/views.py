@@ -33,9 +33,11 @@ def add_data(request, type):
 
     newData = json.loads(request.body)
     model = get_model(type)
+
+    if model is None:
+        return model_not_found()
     
     try:
-
         for key in newData.keys():
             print(model._meta.get_field(key))
 
@@ -61,9 +63,7 @@ def delete_data(request, type, id):
     model = get_model(type)
 
     if model is None:
-        return JsonResponse({
-            "message": "Data type not found."
-        })
+        return model_not_found()
 
     model.objects.get(id=id).delete()
 
@@ -80,16 +80,24 @@ def update_data(request, type, id):
     updatedData = json.loads(request.body)
     model = get_model(type)
 
-    for key in updatedData.keys():
-        if key not in model._meta.get_fields():
-            return incorrect_form_fields_message()
+    if model is None:
+        return model_not_found()
+
+    try:
+        for key in updatedData.keys():
+            print(model._meta.get_field(key))
+    
+    except FieldDoesNotExist:
+        print("Entered here")
+        return incorrect_form_fields_message()
+
         
     oldData = model.objects.get(id=id)
     
     # TODO: UPDATE THE DATA.
 
     return JsonResponse({
-        "message": "Working"
+        "message": "Incomplete function."
     })
 
 
@@ -105,11 +113,14 @@ def incorrect_form_fields_message():
     })
 
 
-
+def model_not_found():
+    return JsonResponse({
+        "message": "Data type not found."
+    })
 
 
 def get_model(type) -> models.Model:
     if type not in TYPE_MODEL_MAPPING.keys():
-        return models.Exi
+        return None
     
     return TYPE_MODEL_MAPPING[type]

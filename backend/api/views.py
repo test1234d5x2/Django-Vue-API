@@ -14,91 +14,46 @@ TYPE_MODEL_MAPPING = {
 }
 
 
-def get_data(request):
 
-    if request.method != "GET":
-        return invalid_request_message()
+def employees_api(request):
+    if request.method == "POST":
 
-    return JsonResponse({
-        "projects": [project for project in Project.objects.all().values()],
-        "employees": [employee for employee in Employee.objects.all().values()],
-        "assignments": [assignment for assignment in Assignment.objects.all().values()],
-    })
+        newData = json.loads(request.body)
 
+        try:
+            for key in newData.keys():
+                print(Employee._meta.get_field(key))
 
-def add_data(request, type):
-    
-    if request.method != "POST":
-        return invalid_request_message()
-
-    newData = json.loads(request.body)
-    model = get_model(type)
-
-    if model is None:
-        return model_not_found()
-    
-    try:
-        for key in newData.keys():
-            print(model._meta.get_field(key))
-
-    except FieldDoesNotExist:
-        print("Entered here")
-        return incorrect_form_fields_message()
+        except FieldDoesNotExist:
+            print("Entered here")
+            return incorrect_form_fields_message()
         
-    newData = model.objects.create(**newData)
-    newData.save()
+        newData = Employee.objects.create(**newData)
+        newData.save()
+
+        return JsonResponse({
+            "data": model_to_dict(newData)
+        })
 
     return JsonResponse({
-        "type": type,
-        "data": model_to_dict(newData),
+        "data": [model_to_dict(employee) for employee in Employee.objects.all()]
     })
 
 
+def employee_api(request, id):
+    employee = Employee.objects.get(id=id)
 
-def delete_data(request, type, id):
-
-    if request.method != "DELETE":
-        return invalid_request_message()
-
-    model = get_model(type)
-
-    if model is None:
-        return model_not_found()
-
-    model.objects.get(id=id).delete()
-
-    return JsonResponse({
-        "message": "Data deleted."
-    })
-
-
-def update_data(request, type, id):
-
-    if request.method != "PUT":
-        return invalid_request_message()
-
-    updatedData = json.loads(request.body)
-    model = get_model(type)
-
-    if model is None:
-        return model_not_found()
-
-    try:
-        for key in updatedData.keys():
-            print(model._meta.get_field(key))
+    if request.method == "DELETE":
+        employee.delete()
+        return JsonResponse({})
     
-    except FieldDoesNotExist:
-        print("Entered here")
-        return incorrect_form_fields_message()
-
-        
-    oldData = model.objects.get(id=id)
+    # Update the data in the employee variable.
     
-    # TODO: UPDATE THE DATA.
-
     return JsonResponse({
-        "message": "Incomplete function."
+        "data": model_to_dict(employee)
     })
+
+
 
 
 def invalid_request_message():

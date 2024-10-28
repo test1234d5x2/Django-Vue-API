@@ -65,3 +65,11 @@
     })
 })
  */
+
+
+
+ /** Deleting Data
+  * const response2 = await fetch(`${BASE_URL}/employeeAPI/1`, {
+        method: "DELETE",
+    })
+  */

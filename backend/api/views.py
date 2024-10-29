@@ -18,11 +18,15 @@ TYPE_MODEL_MAPPING = {
     "assignment": Assignment,
 }
 
+def get_models_structure(request):
 
+    response = {}
 
+    for key, model in TYPE_MODEL_MAPPING.items():
+        response[str(key).capitalize()] = [process_field_name_to_text(field.name) for field in model._meta.get_fields() if not field.auto_created]
 
-def list_models(request):
-    return JsonResponse({"data": list(TYPE_MODEL_MAPPING.keys())})
+    return JsonResponse(response)
+
 
 
 def assignment_api(request, assignment_id):
@@ -147,7 +151,14 @@ def employee_api(request, employee_id):
 
 
 
+
+# Helper Functions
+
 def incorrect_form_fields_message():
     return JsonResponse({
         "message": "Incorrect set of form fields."
     })
+
+
+def process_field_name_to_text(name):
+    return str(name).replace("_", " ").title()

@@ -4,13 +4,13 @@
             Project Assigner
         </div>
 
-        <ul class="nav nav-tabs">
+        <Tabs 
+            :displayed_model="displayed_model"
+            :models_list="Object.keys(models_structure)"
+            :changeTab="changeTab"
+        />
 
-            <li class="nav-item" v-for="(model, index) in models_list['data']">
-                <a class="nav-link" aria-current="page" href="#" v-if="index !== 0">{{ String(model).charAt(0).toUpperCase() + String(model).slice(1).toLowerCase() }}</a>
-                <a class="nav-link active" aria-current="page" href="#" v-else>{{ String(model).charAt(0).toUpperCase() + String(model).slice(1).toLowerCase() }}</a>
-            </li>
-        </ul>
+        <pre>{{ displayed_fields }}</pre>
 
 
 
@@ -39,23 +39,41 @@
         </div> -->
 
     </div>
-  </template>
+</template>
   
 <script>
 
-    const BASE_URL = "http://localhost:8000/api"
+    import Tabs from './components/Tabs.vue';
+
+    const BASE_URL = "http://localhost:8000/api" 
 
     export default {
+        components: {
+            Tabs
+        },
 
         data() {
             return {
-                models_list: '',
+                models_structure: {},
+                displayed_model: "",
+                displayed_fields: []
             }
         },
+
         async mounted() {
-            const response = await fetch(`${BASE_URL}/listTypes`)
-            this.models_list = await response.json()
+            const response = await fetch(`${BASE_URL}/getModelsStructure`)
+            this.models_structure = await response.json()
+            this.displayed_model = Object.keys(this.models_structure)[0]
+            this.displayed_fields = Object.values(this.models_structure)[0]
+        },
+
+        methods: {
+            changeTab(name) {
+                this.displayed_model = name
+                this.displayed_fields = this.models_structure[name]
+            }
         }
+
     }
 </script>
 

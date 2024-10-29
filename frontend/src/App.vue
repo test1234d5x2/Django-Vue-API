@@ -10,7 +10,9 @@
             :changeTab="changeTab"
         />
 
-        <pre>{{ displayed_fields }}</pre>
+        <pre>{{ displayed_data }}</pre>
+
+
 
 
 
@@ -56,7 +58,8 @@
             return {
                 models_structure: {},
                 displayed_model: "",
-                displayed_fields: []
+                displayed_fields: [],
+                displayed_data: []
             }
         },
 
@@ -65,13 +68,21 @@
             this.models_structure = await response.json()
             this.displayed_model = Object.keys(this.models_structure)[0]
             this.displayed_fields = Object.values(this.models_structure)[0]
+
+            const response2 = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}sAPI`)
+            const data = await response2.json()
+            this.displayed_data = data['data']
         },
 
         methods: {
-            changeTab(name) {
+            async changeTab(name) {
                 this.displayed_model = name
                 this.displayed_fields = this.models_structure[name]
-            }
+
+                const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}sAPI`)
+                const data = await response.json()
+                this.displayed_data = data['data']
+            },
         }
 
     }

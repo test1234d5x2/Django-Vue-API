@@ -13,8 +13,8 @@ from .models import Project, Employee, Assignment
 
 
 TYPE_MODEL_MAPPING = {
-    "project": Project,
     "employee": Employee,
+    "project": Project,
     "assignment": Assignment,
 }
 

@@ -14,8 +14,12 @@
         <tbody>
             <tr v-for="record in data">
                 <template v-for="(value, key) in record">
-                    <td v-if="key != 'id'">{{ value }}</td>
+                    <td v-if="value === true">Yes</td>
+                    <td v-else-if="value === false">No</td>
+                    <td v-else-if="key != 'id'">{{ value }}</td>
                 </template>
+                <td><i class="bi bi-pencil-fill icons"></i></td>
+                <td><i class="bi bi-trash icons"></i></td>
             </tr>
         </tbody>
     </table>
@@ -45,3 +49,11 @@
     }
 
 </script>
+
+<style>
+
+    .icons {
+        cursor: pointer;
+    }
+
+</style>

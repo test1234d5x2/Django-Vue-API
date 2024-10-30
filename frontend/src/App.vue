@@ -6,14 +6,12 @@
 
         <Tabs 
             :displayed_model="displayed_model"
-            :models_list="Object.keys(models_structure)"
+            :models_list="models_list"
             :changeTab="changeTab"
         />
 
+
         <pre>{{ displayed_data }}</pre>
-
-
-
 
 
         <!-- Button trigger modal -->
@@ -56,29 +54,26 @@
 
         data() {
             return {
-                models_structure: {},
+                models_list: [],
                 displayed_model: "",
-                displayed_fields: [],
                 displayed_data: []
             }
         },
 
         async mounted() {
-            const response = await fetch(`${BASE_URL}/getModelsStructure`)
-            this.models_structure = await response.json()
-            this.displayed_model = Object.keys(this.models_structure)[0]
-            this.displayed_fields = Object.values(this.models_structure)[0]
+            const response = await fetch(`${BASE_URL}/getModels`)
+            const data = await response.json()
+            this.models_list = data['data']
+            this.displayed_model = this.models_list[0]
 
             const response2 = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}sAPI`)
-            const data = await response2.json()
-            this.displayed_data = data['data']
+            const data2 = await response2.json()
+            this.displayed_data = data2['data']
         },
 
         methods: {
             async changeTab(name) {
                 this.displayed_model = name
-                this.displayed_fields = this.models_structure[name]
-
                 const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}sAPI`)
                 const data = await response.json()
                 this.displayed_data = data['data']

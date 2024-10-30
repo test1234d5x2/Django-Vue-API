@@ -18,14 +18,8 @@ TYPE_MODEL_MAPPING = {
     "assignment": Assignment,
 }
 
-def get_models_structure(request):
-
-    response = {}
-
-    for key, model in TYPE_MODEL_MAPPING.items():
-        response[str(key).capitalize()] = [process_field_name_to_text(field.name) for field in model._meta.get_fields() if not field.auto_created]
-
-    return JsonResponse(response)
+def get_models(request):
+    return JsonResponse({"data": [str(model_name).title() for model_name in TYPE_MODEL_MAPPING.keys()]})
 
 
 

@@ -8,7 +8,8 @@
                         <span>{{ format_field_to_text_display(heading) }}</span>
                     </th>
                 </template>
-                
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -19,7 +20,7 @@
                     <td v-else-if="key != 'id'">{{ value }}</td>
                 </template>
                 <td><i class="bi bi-pencil-fill icons"></i></td>
-                <td><i class="bi bi-trash icons"></i></td>
+                <td><i class="bi bi-trash icons" @click="() => deleteData(record['id'])"></i></td>
             </tr>
         </tbody>
     </table>
@@ -36,6 +37,10 @@
             },
             data: {
                 type: Array,
+                required: true
+            },
+            deleteData: {
+                type: Function,
                 required: true
             }
         },

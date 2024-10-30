@@ -13,6 +13,7 @@
         <InfoTable
             :headings="headings"
             :data="displayed_data"
+            :deleteData="deleteData"
         />
 
         <!-- Button trigger modal -->
@@ -45,7 +46,7 @@
 <script>
 
     import InfoTable from './components/InfoTable.vue';
-import Tabs from './components/Tabs.vue';
+    import Tabs from './components/Tabs.vue';
 
     const BASE_URL = "http://localhost:8000/api" 
 
@@ -90,6 +91,17 @@ import Tabs from './components/Tabs.vue';
                     this.headings = Object.keys(this.displayed_data[0])
                 }
             },
+
+            async deleteData(id) {
+                if (confirm("Are you sure you want to delete this record?")) {
+                    const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}API/${id}`, {
+                        method: "DELETE"
+                    })
+                    const response2 = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}sAPI`)
+                    const data = await response2.json()
+                    this.displayed_data = data['data']
+                }
+            }
         }
 
     }

@@ -94,7 +94,7 @@ def projects_api(request):
         })
         
     return JsonResponse({
-        "data": [project for project in Project.objects.all().values("name", "description", "start_date")]
+        "data": [project for project in Project.objects.all().values("id", "name", "description", "start_date")]
     })
 
 

@@ -58,8 +58,17 @@ def assignments_api(request):
             "data": model_to_dict(newData)
         })
     
+    assignments = Assignment.objects.all().values()
+
+    for x in range(len(assignments)):
+        assignments[x]['employee'] = str(Employee.objects.get(id=assignments[x]['employee_id']))
+        assignments[x]['project'] = str(Project.objects.get(id=assignments[x]['project_id']))
+
+        del assignments[x]['employee_id']
+        del assignments[x]['project_id']
+    
     return JsonResponse({
-        "data": [model_to_dict(assignment) for assignment in Assignment.objects.all()]
+        "data": list(assignments)
     })    
 
 
@@ -83,9 +92,9 @@ def projects_api(request):
         return JsonResponse({
             "data": model_to_dict(newData)
         })
-    
+        
     return JsonResponse({
-        "data": [model_to_dict(project) for project in Project.objects.all()]
+        "data": [project for project in Project.objects.all().values("name", "description", "start_date")]
     })
 
 

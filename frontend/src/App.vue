@@ -11,7 +11,12 @@
         />
 
 
-        <pre>{{ displayed_data }}</pre>
+        <div v-for="row in displayed_data">
+            <SingleRowInfo 
+                :info="row"
+            />
+            <br>
+        </div>
 
 
         <!-- Button trigger modal -->
@@ -43,13 +48,15 @@
   
 <script>
 
+    import SingleRowInfo from './components/SingleRowInfo.vue';
     import Tabs from './components/Tabs.vue';
 
     const BASE_URL = "http://localhost:8000/api" 
 
     export default {
         components: {
-            Tabs
+            Tabs,
+            SingleRowInfo
         },
 
         data() {

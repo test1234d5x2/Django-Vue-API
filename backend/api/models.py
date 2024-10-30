@@ -17,7 +17,7 @@ class Project(models.Model):
     employees = models.ManyToManyField(Employee, through="Assignment")
 
     def __str__(self):
-        return f"{self.name} started at {self.start_date}"
+        return f"{self.name}"
 
 class Assignment(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)

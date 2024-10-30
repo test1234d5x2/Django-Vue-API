@@ -1,8 +1,10 @@
 <template>
     <div class="container pt-3">
-        <div class="h1 text-center border rounded bg-light p-2 mb-3">
+        <div class="h1 text-center border rounded p-2 mb-3">
             Project Assigner
         </div>
+
+        <button class="bg-transparent border border-white">Add {{ displayed_model }}</button>
 
         <Tabs 
             :displayed_model="displayed_model"

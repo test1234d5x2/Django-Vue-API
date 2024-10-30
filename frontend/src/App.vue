@@ -85,9 +85,7 @@
         methods: {
             async changeTab(name) {
                 this.displayed_model = name
-                const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}sAPI`)
-                const data = await response.json()
-                this.displayed_data = data['data']
+                this.updateDisplayedData()
 
                 if (this.displayed_data.length > 0) {
                     this.headings = Object.keys(this.displayed_data[0])
@@ -99,10 +97,14 @@
                     const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}API/${id}`, {
                         method: "DELETE"
                     })
-                    const response2 = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}sAPI`)
-                    const data = await response2.json()
-                    this.displayed_data = data['data']
+                    this.updateDisplayedData()
                 }
+            },
+
+            async updateDisplayedData() {
+                const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}sAPI`)
+                const data = await response.json()
+                this.displayed_data = data['data']
             }
         }
 

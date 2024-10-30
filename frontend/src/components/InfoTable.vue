@@ -5,7 +5,7 @@
             <tr>
                 <template v-for="heading in headings">
                     <th v-if="heading != 'id'">
-                        <span>{{ heading }}</span>
+                        <span>{{ format_field_to_text_display(heading) }}</span>
                     </th>
                 </template>
                 
@@ -33,6 +33,13 @@
             data: {
                 type: Array,
                 required: true
+            }
+        },
+
+        methods: {
+            format_field_to_text_display(field_name) {
+                field_name = String(field_name).replace("_", " ")
+                return String(field_name)[0].toUpperCase(0) + String(field_name).slice(1)
             }
         }
     }

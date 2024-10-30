@@ -10,14 +10,10 @@
             :changeTab="changeTab"
         />
 
-
-        <div v-for="row in displayed_data">
-            <SingleRowInfo 
-                :info="row"
-            />
-            <br>
-        </div>
-
+        <InfoTable
+            :headings="headings"
+            :data="displayed_data"
+        />
 
         <!-- Button trigger modal -->
         <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -48,22 +44,23 @@
   
 <script>
 
-    import SingleRowInfo from './components/SingleRowInfo.vue';
-    import Tabs from './components/Tabs.vue';
+    import InfoTable from './components/InfoTable.vue';
+import Tabs from './components/Tabs.vue';
 
     const BASE_URL = "http://localhost:8000/api" 
 
     export default {
         components: {
             Tabs,
-            SingleRowInfo
+            InfoTable
         },
 
         data() {
             return {
                 models_list: [],
                 displayed_model: "",
-                displayed_data: []
+                displayed_data: [],
+                headings: []
             }
         },
 
@@ -76,6 +73,10 @@
             const response2 = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}sAPI`)
             const data2 = await response2.json()
             this.displayed_data = data2['data']
+
+            if (this.displayed_data.length > 0) {
+                this.headings = Object.keys(this.displayed_data[0])
+            }
         },
 
         methods: {
@@ -84,6 +85,10 @@
                 const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}sAPI`)
                 const data = await response.json()
                 this.displayed_data = data['data']
+
+                if (this.displayed_data.length > 0) {
+                    this.headings = Object.keys(this.displayed_data[0])
+                }
             },
         }
 

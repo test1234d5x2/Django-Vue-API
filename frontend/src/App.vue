@@ -58,7 +58,6 @@
             return {
                 models_list: [],
                 displayed_model: "",
-                displayed_data: [],
                 data_list: {},
                 headings: [],
                 form_fields: [],
@@ -77,19 +76,13 @@
                 this.data_list[model] = data2['data']
             }
 
-            if (this.data_list[this.displayed_model].length > 0) {
-                this.headings = Object.keys(this.data_list[this.displayed_model][0])
-            }
+            this.updateHeadings()            
         },
 
         methods: {
-            async changeTab(name) {
+            changeTab(name) {
                 this.displayed_model = name
-                await this.updateDisplayedData()
-
-                if (this.displayed_data.length > 0) {
-                    this.headings = Object.keys(this.displayed_data[0])
-                }
+                this.updateHeadings()
             },
 
             async deleteData(id) {
@@ -97,14 +90,10 @@
                     const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}API/${id}`, {
                         method: "DELETE"
                     })
-                    this.updateDisplayedData()
+                    if (response.ok) {
+                        this.data_list[this.displayed_model] = this.data_list[this.displayed_model].filter(element => element.id !== id)
+                    }
                 }
-            },
-
-            async updateDisplayedData() {
-                const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}sAPI`)
-                const data = await response.json()
-                this.displayed_data = data['data']
             },
 
             async retrieveFormFields() {
@@ -112,6 +101,12 @@
                 const data = await response.json()
                 this.form_fields = data['data']
             },
+
+            updateHeadings() {
+                if (this.data_list[this.displayed_model].length > 0) {
+                    this.headings = Object.keys(this.data_list[this.displayed_model][0])
+                }
+            }
         }
 
     }

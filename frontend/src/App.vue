@@ -85,7 +85,7 @@
         methods: {
             async changeTab(name) {
                 this.displayed_model = name
-                this.updateDisplayedData()
+                await this.updateDisplayedData()
 
                 if (this.displayed_data.length > 0) {
                     this.headings = Object.keys(this.displayed_data[0])

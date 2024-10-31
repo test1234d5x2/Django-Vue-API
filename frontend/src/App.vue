@@ -96,16 +96,12 @@
                     })
                     const data = await response.json()
 
-                    console.log(data)
-
                     if (Object.keys(data['data']).length === 0) {
                         window.alert("An error occurred submitting the data")
                         return
                     }
 
                     this.data_list[this.displayed_model].push(data['data'])
-                    console.log(this.data_list[this.displayed_model])
-
                 }
                 else {
                     console.log("Failed Attempt To Add Data To " + this.displayed_model)

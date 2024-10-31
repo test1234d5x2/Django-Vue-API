@@ -23,7 +23,7 @@
             :displayed_model="displayed_model"
             :employeesList="data_list['Employee']"
             :projectsList="data_list['Project']"
-            :createData="createData"
+            :saveChanges="saveChanges"
         />
 
     </div>
@@ -85,7 +85,7 @@
                 }
             },
 
-            async createData(form_data, valid) {
+            async saveChanges(form_data, valid, changeType="Add") {
                 if (valid) {
                     const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}sAPI`, {
                         method: "POST",

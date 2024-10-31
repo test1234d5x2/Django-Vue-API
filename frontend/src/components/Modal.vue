@@ -10,19 +10,19 @@
             <div class="modal-body">
                 <template v-if="String(displayed_model).toLowerCase() === 'employee'">
                     <EmployeeForm 
-                        :createData="createData"
+                        :saveChanges="saveChanges"
                     />
                 </template>
                 <template v-else-if="String(displayed_model).toLowerCase() === 'project'">
                     <ProjectForm 
-                        :createData="createData"
+                        :saveChanges="saveChanges"
                     />
                 </template>
                 <template v-else-if="String(displayed_model).toLowerCase() === 'assignment'">
                     <AssignmentForm 
                         :projectsList="projectsList"
                         :employeesList="employeesList"
-                        :createData="createData"
+                        :saveChanges="saveChanges"
                     />
                 </template>
             </div>
@@ -63,7 +63,7 @@
                 type: Array,
                 required: true
             },
-            createData: {
+            saveChanges: {
                 type: Function,
                 required: true
             }

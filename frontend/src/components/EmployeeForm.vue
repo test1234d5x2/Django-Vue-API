@@ -19,7 +19,7 @@
 
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" @click="() => createData(form_data, validateForm())">Save changes</button>
+        <button type="button" class="btn btn-primary" @click="() => saveChanges(form_data, validateForm())">Save changes</button>
     </div>
 
 </template>
@@ -29,7 +29,7 @@
     export default {
 
         props: {
-            createData: {
+            saveChanges: {
                 type: Function,
                 required: true
             }

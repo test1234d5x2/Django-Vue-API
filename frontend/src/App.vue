@@ -4,7 +4,7 @@
             Project Assigner
         </div>
 
-        <button @click="retrieveFormFields" class="bg-transparent border border-white" data-bs-toggle="modal" data-bs-target="#exampleModal">Add {{ displayed_model }}</button>
+        <button class="bg-transparent border border-white mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Add {{ displayed_model }}</button>
 
         <Tabs 
             :displayed_model="displayed_model"
@@ -18,7 +18,11 @@
             :deleteData="deleteData"
         />
 
-        <Modal />
+        <Modal
+            :title="'Add New ' + displayed_model"
+            :displayed_model="displayed_model"
+
+        />
 
     </div>
 </template>
@@ -35,7 +39,7 @@
         components: {
             Tabs,
             InfoTable,
-            Modal
+            Modal,
         },
 
         data() {
@@ -44,7 +48,6 @@
                 displayed_model: "",
                 data_list: {},
                 headings: [],
-                form_fields: [],
             }
         },
 
@@ -60,7 +63,7 @@
                 this.data_list[model] = data2['data']
             }
 
-            this.updateHeadings()            
+            this.updateHeadings()
         },
 
         methods: {
@@ -78,12 +81,6 @@
                         this.data_list[this.displayed_model] = this.data_list[this.displayed_model].filter(element => element.id !== id)
                     }
                 }
-            },
-
-            async retrieveFormFields() {
-                const response = await fetch(`${BASE_URL}/getFormFields/${this.displayed_model.toLowerCase()}`)
-                const data = await response.json()
-                this.form_fields = data['data']
             },
 
             updateHeadings() {

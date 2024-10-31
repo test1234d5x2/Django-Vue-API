@@ -9,19 +9,24 @@
             </div>
             <div class="modal-body">
                 <template v-if="String(displayed_model).toLowerCase() === 'employee'">
-                    <EmployeeForm />
+                    <EmployeeForm 
+                        :createData="createData"
+                    />
                 </template>
                 <template v-else-if="String(displayed_model).toLowerCase() === 'project'">
-                    <ProjectForm />
+                    <ProjectForm 
+                        :createData="createData"
+                    />
                 </template>
                 <template v-else-if="String(displayed_model).toLowerCase() === 'assignment'">
-                    <AssignmentForm />
+                    <AssignmentForm 
+                        :projectsList="projectsList"
+                        :employeesList="employeesList"
+                        :createData="createData"
+                    />
                 </template>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+           
             </div>
         </div>
     </div>
@@ -48,6 +53,18 @@
             },
             displayed_model: {
                 type: String,
+                required: true
+            },
+            employeesList: {
+                type: Array,
+                required: true
+            },
+            projectsList: {
+                type: Array,
+                required: true
+            },
+            createData: {
+                type: Function,
                 required: true
             }
         }

@@ -21,7 +21,9 @@
         <Modal
             :title="'Add New ' + displayed_model"
             :displayed_model="displayed_model"
-
+            :employeesList="data_list['Employee']"
+            :projectsList="data_list['Project']"
+            :createData="createData"
         />
 
     </div>
@@ -80,6 +82,33 @@
                     if (response.ok) {
                         this.data_list[this.displayed_model] = this.data_list[this.displayed_model].filter(element => element.id !== id)
                     }
+                }
+            },
+
+            async createData(form_data, valid) {
+                if (valid) {
+                    const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}sAPI`, {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(form_data)
+                    })
+                    const data = await response.json()
+
+                    console.log(data)
+
+                    if (Object.keys(data['data']).length === 0) {
+                        window.alert("An error occurred submitting the data")
+                        return
+                    }
+
+                    this.data_list[this.displayed_model].push(data['data'])
+                    console.log(this.data_list[this.displayed_model])
+
+                }
+                else {
+                    console.log("Failed Attempt To Add Data To " + this.displayed_model)
                 }
             },
 

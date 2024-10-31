@@ -53,13 +53,25 @@ def assignments_api(request):
             print("Entered Here")
             return incorrect_form_fields_message()
         
-        newData = Assignment.objects.create(**newData)
-        newData.save()
+        form = AssignmentForm(newData)
+        if (form.is_valid()):
+            newRecord = Assignment.objects.create(**form.cleaned_data)
+            newRecord.save()
+            
+            newData = Assignment.objects.filter(id=newRecord.pk).values()[0]
 
-        return JsonResponse({
-            "data": model_to_dict(newData)
-        })
-    
+            newData['employee'] = str(Employee.objects.get(id=newData['employee_id']))
+            newData['project'] = str(Project.objects.get(id=newData['employee_id']))
+
+            del newData['employee_id']
+            del newData['project_id']
+
+            return JsonResponse({
+                "data": newData
+            })
+        else:
+            return JsonResponse({"data": {}})
+
     assignments = Assignment.objects.all().values()
 
     for x in range(len(assignments)):
@@ -88,12 +100,15 @@ def projects_api(request):
             print("Entered Here")
             return incorrect_form_fields_message()
         
-        newData = Project.objects.create(**newData)
-        newData.save()
-
-        return JsonResponse({
-            "data": model_to_dict(newData)
-        })
+        form = ProjectForm(newData)
+        if (form.is_valid()):
+            newData = Project.objects.create(**newData)
+            newData.save()
+            return JsonResponse({
+                "data": model_to_dict(newData, exclude=['employees'])
+            })
+        else:
+            return JsonResponse({"data": {}})
         
     return JsonResponse({
         "data": [project for project in Project.objects.all().values("id", "name", "description", "start_date")]
@@ -129,12 +144,16 @@ def employees_api(request):
             print("Entered here")
             return incorrect_form_fields_message()
         
-        newData = Employee.objects.create(**newData)
-        newData.save()
 
-        return JsonResponse({
-            "data": model_to_dict(newData)
-        })
+        form = EmployeeForm(newData)
+        if (form.is_valid()):
+            newData = Employee.objects.create(**newData)
+            newData.save()
+            return JsonResponse({
+                "data": model_to_dict(newData)
+            })
+        else:
+            return JsonResponse({"data": {}})
 
     return JsonResponse({
         "data": [model_to_dict(employee) for employee in Employee.objects.all()]

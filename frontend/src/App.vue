@@ -122,21 +122,6 @@
     }
 </script>
 
-
-/** Adding Data
- * await fetch(`${BASE_URL}/employeesAPI`, {
-    method: "POST",
-    body: JSON.stringify({
-        "name": "name",
-        "surname": "surname",
-        "background": "a description",
-        "is_working": true
-    })
-})
- */
-
-
-
 /** Updating Data
  * await fetch(`${BASE_URL}/employeeAPI/{employee_id}`, {
     method: "PUT",,

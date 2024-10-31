@@ -19,20 +19,6 @@ TYPE_MODEL_MAPPING = {
     "assignment": Assignment,
 }
 
-TYPE_FORM_MAPPING = {
-    "employee": EmployeeForm,
-    "project": ProjectForm,
-    "assignment": AssignmentForm,
-}
-
-
-def get_form_fields(request, type):
-
-    form = AssignmentForm({"project": 2})
-    print(form.is_valid())
-
-    return JsonResponse({"data": list(TYPE_FORM_MAPPING[type]().fields.keys())})
-
 
 def get_models(request):
     return JsonResponse({"data": [str(model_name).title() for model_name in TYPE_MODEL_MAPPING.keys()]})

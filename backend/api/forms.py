@@ -134,7 +134,7 @@ class AssignmentForm(forms.ModelForm):
 
 # Validate name
 def valid_name(name):
-    cleaned_name = re.sub(r"[ -]", name)
+    cleaned_name = re.sub(r"[ -]", "", name)
 
     if not str(cleaned_name).isalpha():
         return False

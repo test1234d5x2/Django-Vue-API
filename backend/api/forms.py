@@ -9,7 +9,7 @@ class EmployeeForm(forms.ModelForm):
     name = forms.CharField(max_length=30)
     surname = forms.CharField(max_length=30)
     background = forms.CharField(widget=forms.Textarea())
-    is_working = forms.BooleanField()
+    is_working = forms.BooleanField(required=False)
 
 
 

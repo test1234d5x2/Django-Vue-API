@@ -67,7 +67,7 @@ class ProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = "__all__"
+        fields = ('name', 'description', 'start_date')
 
     def clean_name(self):
         name = self.cleaned_data.get("name")

@@ -61,7 +61,7 @@ def assignments_api(request):
             newData = Assignment.objects.filter(id=newRecord.pk).values()[0]
 
             newData['employee'] = str(Employee.objects.get(id=newData['employee_id']))
-            newData['project'] = str(Project.objects.get(id=newData['employee_id']))
+            newData['project'] = str(Project.objects.get(id=newData['project_id']))
 
             del newData['employee_id']
             del newData['project_id']

@@ -41,14 +41,18 @@
 
         data() {
             return {
-                id: this.editable_data['id'] || NaN,
+                id: NaN,
                 form_data: {
-                    name: this.editable_data['name'] || "",
-                    surname: this.editable_data['surname'] || "",
-                    background: this.editable_data['background'] || "",
-                    is_working: this.editable_data['is_working'] || false,
+                    name: "",
+                    surname: "",
+                    background: "",
+                    is_working: false,
                 }
             }
+        },
+
+        mounted() {
+            console.log(this.editable_data)
         },
 
         methods: {

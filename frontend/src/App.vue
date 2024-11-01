@@ -4,9 +4,11 @@
             Project Assigner
         </div>
 
-        <button class="bg-transparent border border-white mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Add {{ displayed_model }}</button>
+        <button class="bg-transparent border border-white mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="() => [setMode('add')]">Add {{ displayed_model }}</button>
 
-        <Tabs 
+        <!--  -->
+
+        <Tabs
             :displayed_model="displayed_model"
             :models_list="models_list"
             :changeTab="changeTab"
@@ -16,14 +18,20 @@
             :headings="headings"
             :data="data_list[displayed_model]"
             :deleteData="deleteData"
+            :setMode="setMode"
+            :setEditableData="setEditableData"
+
         />
 
         <Modal
-            :title="'Add New ' + displayed_model"
+            :title="displayed_model"
             :displayed_model="displayed_model"
             :employeesList="data_list['Employee']"
             :projectsList="data_list['Project']"
             :saveChanges="saveChanges"
+            :mode="mode"
+            :editable_data="editable_data"
+            :key="Math.random()"
         />
 
     </div>
@@ -50,6 +58,8 @@
                 displayed_model: "",
                 data_list: {},
                 headings: [],
+                editable_data: {},
+                mode: "",
             }
         },
 
@@ -74,6 +84,17 @@
                 this.updateHeadings()
             },
 
+            setEditableData(record) {
+                this.editable_data = record
+            },
+
+            setMode(mode) {
+                this.mode = mode
+                if (mode == "add") {
+                    this.editable_data = {}
+                }
+            },
+
             async deleteData(id) {
                 if (confirm("Are you sure you want to delete this record?")) {
                     const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}API/${id}`, {
@@ -85,8 +106,9 @@
                 }
             },
 
-            async saveChanges(form_data, valid, changeType="Add") {
-                if (valid) {
+            async saveChanges(form_data, valid, id=NaN) {
+                // Add Data
+                if (valid && isNaN(id)) {
                     const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}sAPI`, {
                         method: "POST",
                         headers: {
@@ -103,6 +125,18 @@
 
                     this.data_list[this.displayed_model].push(data['data'])
                 }
+
+                // Update Data
+                else if (valid && id instanceof Number) {
+                    const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}API/${id}`, {
+                        method: "PUT",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(form_data)
+                    })
+                }
+
                 else {
                     console.log("Failed Attempt To Add Data To " + this.displayed_model)
                 }
@@ -119,13 +153,5 @@
 </script>
 
 /** Updating Data
- * await fetch(`${BASE_URL}/employeeAPI/{employee_id}`, {
-    method: "PUT",,
-    body: JSON.stringify({
-        "name": "name",
-        "surname": "surname",
-        "background": "a description",
-        "is_working": true
-    })
-})
+ * 
  */

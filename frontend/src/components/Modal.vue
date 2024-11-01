@@ -11,6 +11,7 @@
                 <template v-if="String(displayed_model).toLowerCase() === 'employee'">
                     <EmployeeForm 
                         :saveChanges="saveChanges"
+                        :editable_data="editable_data"
                     />
                 </template>
                 <template v-else-if="String(displayed_model).toLowerCase() === 'project'">
@@ -65,6 +66,14 @@
             },
             saveChanges: {
                 type: Function,
+                required: true
+            },
+            mode: {
+                type: String,
+                required: true
+            },
+            editable_data: {
+                type: Object,
                 required: true
             }
         }

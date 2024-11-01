@@ -19,7 +19,7 @@
                     <td v-else-if="value === false">No</td>
                     <td v-else-if="key != 'id'">{{ value }}</td>
                 </template>
-                <td><i class="bi bi-pencil-fill icons"></i></td>
+                <td><i class="bi bi-pencil-fill icons" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="() => [setEditableData(record), setMode('edit')]"></i></td>
                 <td><i class="bi bi-trash icons" @click="() => deleteData(record['id'])"></i></td>
             </tr>
         </tbody>
@@ -28,6 +28,8 @@
 </template>
 
 <script>
+
+import { nextTick } from 'vue';
 
     export default {
         props: {
@@ -42,7 +44,15 @@
             deleteData: {
                 type: Function,
                 required: true
-            }
+            },
+            setMode: {
+                type: Function,
+                required: true
+            },
+            setEditableData: {
+                type: Function,
+                required: true
+            },
         },
 
         methods: {

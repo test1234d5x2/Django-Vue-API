@@ -8,8 +8,8 @@
                         <span>{{ format_field_to_text_display(heading) }}</span>
                     </th>
                 </template>
-                <th>Edit</th>
-                <th>Delete</th>
+                <th v-if="headings.length > 0">Edit</th>
+                <th v-if="headings.length > 0">Delete</th>
             </tr>
         </thead>
         <tbody>

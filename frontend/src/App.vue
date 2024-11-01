@@ -146,6 +146,9 @@
                 if (this.data_list[this.displayed_model].length > 0) {
                     this.headings = Object.keys(this.data_list[this.displayed_model][0])
                 }
+                else {
+                    this.headings = {}
+                }
             }
         }
 

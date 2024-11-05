@@ -25,7 +25,7 @@
             :displayed_model="displayed_model"
             :employeesList="data_list['Employee']"
             :projectsList="data_list['Project']"
-            :saveChanges="saveChanges"
+            @save-changes="saveChanges"
             :mode="mode"
             :form_data="form_data"
         />

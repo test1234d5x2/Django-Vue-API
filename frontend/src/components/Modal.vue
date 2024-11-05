@@ -10,13 +10,13 @@
             <div class="modal-body">
                 <template v-if="String(displayed_model).toLowerCase() === 'employee'">
                     <EmployeeForm 
-                        :saveChanges="saveChanges"
+                        @save-changes="(form_data, valid, id) => $emit('save-changes', form_data, valid, id)"
                         :form_data="form_data"
                     />
                 </template>
                 <template v-else-if="String(displayed_model).toLowerCase() === 'project'">
                     <ProjectForm 
-                        :saveChanges="saveChanges"
+                        @save-changes="(form_data, valid, id) => $emit('save-changes', form_data, valid, id)"
                         :form_data="form_data"
                     />
                 </template>
@@ -24,8 +24,8 @@
                     <AssignmentForm 
                         :projectsList="projectsList"
                         :employeesList="employeesList"
-                        :saveChanges="saveChanges"
                         :form_data="form_data"
+                        @save-changes="(form_data, valid, id) => $emit('save-changes', form_data, valid, id)"
                     />
                 </template>
             </div>
@@ -64,10 +64,6 @@
             },
             projectsList: {
                 type: Array,
-                required: true
-            },
-            saveChanges: {
-                type: Function,
                 required: true
             },
             mode: {

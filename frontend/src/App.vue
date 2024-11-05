@@ -4,9 +4,7 @@
             Project Assigner
         </div>
 
-        <button class="bg-transparent border border-white mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="() => [setMode('add')]">Add {{ displayed_model }}</button>
-
-        <!--  -->
+        <button class="bg-transparent border border-white mb-3" @click="() => prepareAddForm()">Add {{ displayed_model }}</button>
 
         <Tabs
             :displayed_model="displayed_model"
@@ -16,10 +14,12 @@
 
         <InfoTable
             :headings="headings"
-            :data="data_list[displayed_model]"
+            :data="formatted_display_data"
             :deleteData="deleteData"
             :setMode="setMode"
             :setEditableData="setEditableData"
+            :toggleModal="toggleModal"
+            :prepareEditForm="prepareEditForm"
 
         />
 
@@ -30,8 +30,7 @@
             :projectsList="data_list['Project']"
             :saveChanges="saveChanges"
             :mode="mode"
-            :editable_data="editable_data"
-            :key="Math.random()"
+            :form_data="form_data"
         />
 
     </div>
@@ -39,11 +38,18 @@
   
 <script>
 
+    import * as bootstrap from 'bootstrap'
+
     import InfoTable from './components/InfoTable.vue';
     import Modal from './components/Modal.vue';
     import Tabs from './components/Tabs.vue';
 
-    const BASE_URL = "http://localhost:8000/api" 
+    const BASE_URL = "http://localhost:8000/api"
+
+    const MODES = {
+        "ADD": "add",
+        "EDIT": "edit"
+    }
 
     export default {
         components: {
@@ -58,8 +64,10 @@
                 displayed_model: "",
                 data_list: {},
                 headings: [],
-                editable_data: {},
+                form_data: {},
                 mode: "",
+                modal: "",
+                formatted_display_data: [],
             }
         },
 
@@ -67,7 +75,6 @@
             const response = await fetch(`${BASE_URL}/getModels`)
             const data = await response.json()
             this.models_list = data['data']
-            this.displayed_model = this.models_list[0]
 
             for (const model of this.models_list) {                
                 var response2 = await fetch(`${BASE_URL}/${model.toLowerCase()}sAPI`)
@@ -75,24 +82,73 @@
                 this.data_list[model] = data2['data']
             }
 
-            this.updateHeadings()
+            this.changeTab(this.models_list[0])
         },
 
         methods: {
             changeTab(name) {
                 this.displayed_model = name
+                this.processDisplayData()
                 this.updateHeadings()
             },
 
+            processDisplayData() {
+                if (this.displayed_model === "Assignment") {
+                    let assignmentsList = JSON.parse(JSON.stringify(this.data_list[this.displayed_model]))
+                    this.formatted_display_data = assignmentsList.map((record) => {
+                        for (let employee of this.data_list['Employee']) {
+                            if (employee['id'] === record['employee_id']) {
+                                record['employee'] = employee['name'] + " " + employee['surname']
+                            }
+                        }
+
+
+
+                        for (let project of this.data_list['Project']) {
+                            if (project['id'] === record['project_id']) {
+                                console.log("Here")
+                                record['project'] = project['name']
+                            }
+                        }
+                        delete record['employee_id']
+                        delete record['project_id']
+
+                        return record
+                    })
+
+                    console.log(this.formatted_display_data)
+                }
+                else {
+                    this.formatted_display_data = this.data_list[this.displayed_model]
+                }   
+            },
+
             setEditableData(record) {
-                this.editable_data = record
+                this.form_data = JSON.parse(JSON.stringify(record))
+            },
+
+            prepareAddForm() {
+                this.setMode(MODES['ADD'])
+                this.setEditableData({})
+
+                this.modal = new bootstrap.Modal(document.getElementById("exampleModal"))
+                this.toggleModal()
+            },
+
+            prepareEditForm(record) {
+                this.setMode(MODES['EDIT'])
+                this.setEditableData(record)
+
+                this.modal = new bootstrap.Modal(document.getElementById("exampleModal"))
+                this.toggleModal()
+            },
+
+            toggleModal() {
+                this.modal.toggle()
             },
 
             setMode(mode) {
                 this.mode = mode
-                if (mode == "add") {
-                    this.editable_data = {}
-                }
             },
 
             async deleteData(id) {
@@ -106,45 +162,69 @@
                 }
             },
 
-            async saveChanges(form_data, valid, id=NaN) {
-                // Add Data
-                if (valid && isNaN(id)) {
-                    const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}sAPI`, {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(form_data)
-                    })
-                    const data = await response.json()
+            async addData(form_data) {
+                const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}sAPI`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(form_data)
+                })
+                const data = await response.json()
 
-                    if (Object.keys(data['data']).length === 0) {
-                        window.alert("An error occurred submitting the data")
-                        return
+                if (Object.keys(data['data']).length === 0) {
+                    window.alert("An error occurred submitting the data")
+                    return
+                }
+
+                this.data_list[this.displayed_model].push(data['data'])
+            },
+
+            async updateData(form_data, id) {
+                const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}API/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(form_data)
+                })
+
+                for (let x = 0; x < this.data_list[this.displayed_model].length; x++) {
+                    if (this.data_list[this.displayed_model][x]['id'] == id) {
+                        this.data_list[this.displayed_model][x] = form_data
                     }
-
-                    this.data_list[this.displayed_model].push(data['data'])
-                }
-
-                // Update Data
-                else if (valid && id instanceof Number) {
-                    const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}API/${id}`, {
-                        method: "PUT",
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(form_data)
-                    })
-                }
-
-                else {
-                    console.log("Failed Attempt To Add Data To " + this.displayed_model)
                 }
             },
 
+            async saveChanges(form_data, valid, id=-1) {
+                console.log(form_data, id)
+                // Add Data
+                if (valid && this.mode == MODES['ADD']) {
+                    await this.addData(form_data)
+                }
+
+                // Update Data
+                else if (valid && this.record_exists(id, this.displayed_model)) {
+                    await this.updateData(form_data, id)
+                }
+
+                else {
+                    console.log("Failed Attempt To Save Changes.")
+                }
+            },
+
+            record_exists(id, displayed_model) {
+                for (let record of this.data_list[displayed_model]) {
+                    if (record['id'] === id) {
+                        return true
+                    }
+                }
+                return false
+            },
+
             updateHeadings() {
-                if (this.data_list[this.displayed_model].length > 0) {
-                    this.headings = Object.keys(this.data_list[this.displayed_model][0])
+                if (this.formatted_display_data.length > 0) {
+                    this.headings = Object.keys(this.formatted_display_data[0])
                 }
                 else {
                     this.headings = []

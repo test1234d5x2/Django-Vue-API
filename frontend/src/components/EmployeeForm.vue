@@ -2,11 +2,11 @@
 
     <div class="mb-3">
         <label for="name" class="form-label">Name</label>
-        <input type="text" v-model="form_data.name" class="form-control" id="name" placeholder="Alice">
+        <input type="text" v-model="form_data.name" class="form-control" id="name">
     </div>
     <div class="mb-3">
         <label for="surname" class="form-label">Surname</label>
-        <input type="text" v-model="form_data.surname" class="form-control" id="surname" placeholder="Johnson">
+        <input type="text" v-model="form_data.surname" class="form-control" id="surname">
     </div>
     <div class="mb-3">
         <label for="background" class="form-label">Background</label>
@@ -19,7 +19,7 @@
 
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" @click="() => saveChanges(form_data, validateForm())">Save changes</button>
+        <button type="button" class="btn btn-primary" @click="() => saveChanges(form_data, validateForm(), Object.keys(form_data).indexOf('id') === -1 ? -1: form_data['id'])">Save changes</button>
     </div>
 
 </template>
@@ -33,7 +33,7 @@
                 type: Function,
                 required: true
             },
-            editable_data: {
+            form_data: {
                 type: Object,
                 required: true
             }
@@ -42,17 +42,7 @@
         data() {
             return {
                 id: NaN,
-                form_data: {
-                    name: "",
-                    surname: "",
-                    background: "",
-                    is_working: false,
-                }
             }
-        },
-
-        mounted() {
-            console.log(this.editable_data)
         },
 
         methods: {
@@ -80,9 +70,8 @@
                     return false
                 }
 
-                if (this.form_data.is_working !== true && this.form_data.is_working !== false) {
-                    window.alert("Is Working must be a checked or unchecked.")
-                    return false
+                if (this.form_data.is_working !== true) {
+                    this.form_data.is_working = false
                 }
 
                 return true

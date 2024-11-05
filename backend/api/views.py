@@ -34,6 +34,15 @@ def assignment_api(request, assignment_id):
     
 
     # Update the data in the assignment variable.
+
+    updatedData = json.loads(request.body)
+
+    for (field_name, value) in updatedData.items():
+        setattr(assignment, field_name, value)
+
+    assignment.save()
+
+    assignment = Assignment.objects.filter(id=assignment).values()[0]
     
     return JsonResponse({
         "data": model_to_dict(assignment)
@@ -60,12 +69,6 @@ def assignments_api(request):
             
             newData = Assignment.objects.filter(id=newRecord.pk).values()[0]
 
-            newData['employee'] = str(Employee.objects.get(id=newData['employee_id']))
-            newData['project'] = str(Project.objects.get(id=newData['project_id']))
-
-            del newData['employee_id']
-            del newData['project_id']
-
             return JsonResponse({
                 "data": newData
             })
@@ -73,13 +76,6 @@ def assignments_api(request):
             return JsonResponse({"data": {}})
 
     assignments = Assignment.objects.all().values()
-
-    for x in range(len(assignments)):
-        assignments[x]['employee'] = str(Employee.objects.get(id=assignments[x]['employee_id']))
-        assignments[x]['project'] = str(Project.objects.get(id=assignments[x]['project_id']))
-
-        del assignments[x]['employee_id']
-        del assignments[x]['project_id']
     
     return JsonResponse({
         "data": list(assignments)
@@ -124,9 +120,16 @@ def project_api(request, project_id):
     
 
     # Update the data in the project variable.
+
+    for (field_name, value) in json.loads(request.body).items():
+        setattr(project, field_name, value)
+
+    project.save()
+
+    project = Project.objects.get(id=project_id)
     
     return JsonResponse({
-        "data": model_to_dict(project)
+        "data": model_to_dict(project, exclude=['employees'])
     })
 
 
@@ -168,6 +171,13 @@ def employee_api(request, employee_id):
         return JsonResponse({})
     
     # Update the data in the employee variable.
+
+    for (field_name, value) in json.loads(request.body).items():
+        setattr(employee, field_name, value)
+
+    employee.save()
+
+    employee = Employee.objects.get(id=employee_id)
     
     return JsonResponse({
         "data": model_to_dict(employee)

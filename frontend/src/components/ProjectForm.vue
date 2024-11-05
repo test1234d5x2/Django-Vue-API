@@ -15,7 +15,7 @@
 
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" @click="() => saveChanges(form_data, validateForm())">Save changes</button>
+        <button type="button" class="btn btn-primary" @click="() => saveChanges(form_data, validateForm(), Object.keys(form_data).indexOf('id') === -1 ? -1: form_data['id'])">Save changes</button>
     </div>
 
 </template>
@@ -27,16 +27,16 @@
             saveChanges: {
                 type: Function,
                 required: true
+            },
+            form_data: {
+                type: Object,
+                required: true
             }
         },
 
         data() {
             return {
-                form_data: {
-                    name: "",
-                    description: "",
-                    start_date: "",
-                }
+                id: NaN
             }
         },
 

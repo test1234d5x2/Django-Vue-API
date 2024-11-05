@@ -5,18 +5,19 @@
             <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">{{ title }}</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal" ></button>
             </div>
             <div class="modal-body">
                 <template v-if="String(displayed_model).toLowerCase() === 'employee'">
                     <EmployeeForm 
                         :saveChanges="saveChanges"
-                        :editable_data="editable_data"
+                        :form_data="form_data"
                     />
                 </template>
                 <template v-else-if="String(displayed_model).toLowerCase() === 'project'">
                     <ProjectForm 
                         :saveChanges="saveChanges"
+                        :form_data="form_data"
                     />
                 </template>
                 <template v-else-if="String(displayed_model).toLowerCase() === 'assignment'">
@@ -24,6 +25,7 @@
                         :projectsList="projectsList"
                         :employeesList="employeesList"
                         :saveChanges="saveChanges"
+                        :form_data="form_data"
                     />
                 </template>
             </div>
@@ -72,10 +74,10 @@
                 type: String,
                 required: true
             },
-            editable_data: {
+            form_data: {
                 type: Object,
                 required: true
-            }
+            },
         }
     }
 

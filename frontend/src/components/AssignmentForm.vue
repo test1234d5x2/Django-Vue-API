@@ -1,14 +1,14 @@
 <template>
 
     <div class="mb-3">
-        <label for="employee" class="form-label" @click="() => console.log(form_data.employee)">Employee</label>
-        <select class="form-select" aria-label="Select Employee" id="employee" v-model="form_data.employee">
+        <label for="employee" class="form-label">Employee</label>
+        <select class="form-select" aria-label="Select Employee" id="employee" v-model="form_data.employee_id">
             <option v-for="employee in employeesList" :value="employee.id">{{employee.name}} {{employee.surname}}</option>
         </select>
     </div>
     <div class="mb-3">
         <label for="project" class="form-label">Project</label>
-        <select class="form-select" aria-label="Select Project" id="project" v-model="form_data.project">
+        <select class="form-select" aria-label="Select Project" id="project" v-model="form_data.project_id">
             <option v-for="project in projectsList" :value="project.id">{{ project.name }}</option>
         </select>
     </div>
@@ -23,7 +23,7 @@
     
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" @click="() => saveChanges(form_data, validateForm())">Save changes</button>
+        <button type="button" class="btn btn-primary" @click="() => saveChanges(form_data, validateForm(), Object.keys(form_data).indexOf('id') === -1 ? -1: form_data['id'])">Save changes</button>
     </div>
 
 </template>
@@ -43,27 +43,25 @@
             },
             saveChanges: {
                 type: Function,
-                required: true,
+                required: true
+            },
+            form_data: {
+                type: Object,
+                required: true
             }
         },
 
         data() {
             return {
-                form_data: {
-                    employee: "0",
-                    project: "0",
-                    role: "",
-                    weekly_hours: "",
-
-                }
+                id: NaN,
             }
         },
         
         methods: {
             validateForm() {
                 let employeeIdExists = false;
-                for (let i = 0; i < this.$props.employeesList.length; i++) {
-                    if (this.$props.employeesList[i].id === parseInt(this.form_data.employee)) {
+                for (let i = 0; i < this.employeesList.length; i++) {
+                    if (this.employeesList[i].id === parseInt(this.form_data.employee_id)) {
                         employeeIdExists = true;
                         break;
                     }
@@ -74,10 +72,9 @@
                 }
 
                 let projectIdExists = false;
-                for (let i = 0; i < this.$props.projectsList.length; i++) {
-                    if (this.$props.projectsList[i].id === parseInt(this.form_data.project)) {
+                for (let i = 0; i < this.projectsList.length; i++) {
+                    if (this.projectsList[i].id === parseInt(this.form_data.project_id)) {
                         projectIdExists = true;
-                        break;
                     }
                 }
                 if (!projectIdExists) {

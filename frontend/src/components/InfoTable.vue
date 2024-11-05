@@ -15,7 +15,7 @@
         <tbody>
             <tr v-for="record in data">
                 <template v-for="(value, key) in record">
-                    <td>{{ generateDisplayValue(key, value) }}</td>
+                    <td v-if="!excluded_fields.includes(key)">{{ generateDisplayValue(key, value) }}</td>
                 </template>
                 <!-- <td><i class="bi bi-pencil-fill icons" @click="() => prepareEditForm(record)"></i></td> -->
                 <td><i class="bi bi-pencil-fill icons" @click="$emit('prepare-edit-form', record)"></i></td>
@@ -40,6 +40,12 @@
             }
         },
 
+        data() {
+            return {
+                excluded_fields: ['id', 'employee_id', 'project_id', 'assignment_id']
+            }
+        },
+
         methods: {
             format_field_to_text_display(field_name) {
                 field_name = String(field_name).replace("_", " ")
@@ -55,7 +61,7 @@
                 if (value === true) return "Yes"
                 else if (value === false) return "No"
                 else if (key === "start_date") return this.formate_date_value_to_display(value)
-                else return value
+                else if (key !== "id") return value
             }
         }
     }

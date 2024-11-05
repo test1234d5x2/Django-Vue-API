@@ -118,13 +118,16 @@ def project_api(request, project_id):
         project.delete()
         return JsonResponse({})
     
+    updatedData = json.loads(request.body)
+    form = ProjectForm(updatedData)
+    
+    if (form.is_valid()):
+        for (field_name, value) in updatedData.items():
+            setattr(project, field_name, value)
 
-    # Update the data in the project variable.
-
-    for (field_name, value) in json.loads(request.body).items():
-        setattr(project, field_name, value)
-
-    project.save()
+        project.save()
+    else:
+        return JsonResponse({"data": {}})
 
     project = Project.objects.get(id=project_id)
     
@@ -170,12 +173,16 @@ def employee_api(request, employee_id):
         employee.delete()
         return JsonResponse({})
     
-    # Update the data in the employee variable.
+    updatedData = json.loads(request.body)
+    form = EmployeeForm(updatedData)
+    
+    if (form.is_valid()):
+        for (field_name, value) in updatedData.items():
+            setattr(employee, field_name, value)
 
-    for (field_name, value) in json.loads(request.body).items():
-        setattr(employee, field_name, value)
-
-    employee.save()
+        employee.save()
+    else:
+        return JsonResponse({"data": {}})
 
     employee = Employee.objects.get(id=employee_id)
     

@@ -37,6 +37,9 @@
 
         methods: {
             validateForm() {
+
+                let numberRE = /\d/
+
                 if (!this.form_data.name || this.form_data.name.trim().length === 0) {
                     window.alert("Name cannot be empty.")
                     return false
@@ -45,13 +48,22 @@
                     window.alert("Name must not be more than 30 characters.")
                     return false
                 }
+                else if (numberRE.test(this.form_data.name)) {
+                    window.alert("Name cannot have numbers.")
+                    return false
+                }
 
 
                 if (!this.form_data.surname || this.form_data.surname.trim().length === 0) {
                     window.alert("Surname cannot be empty.")
                     return false
-                } else if (this.form_data.surname.length > 30) {
+                } 
+                else if (this.form_data.surname.length > 30) {
                     window.alert("Surname must be 30 characters or less.")
+                    return false
+                }
+                else if (numberRE.test(this.form_data.surname)) {
+                    window.alert("Surname cannot have numbers.")
                     return false
                 }
 

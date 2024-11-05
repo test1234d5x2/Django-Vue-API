@@ -17,6 +17,7 @@
                 <template v-for="(value, key) in record">
                     <td v-if="value === true">Yes</td>
                     <td v-else-if="value === false">No</td>
+                    <td v-else-if="key === 'start_date'">{{ formate_date_value_to_display(value) }}</td>
                     <td v-else-if="!(key == 'id' || key == 'employee_id' || key == 'project_id')">{{ value }}</td>
                 </template>
                 <td><i class="bi bi-pencil-fill icons" @click="() => prepareEditForm(record)"></i></td>
@@ -53,6 +54,11 @@
             format_field_to_text_display(field_name) {
                 field_name = String(field_name).replace("_", " ")
                 return String(field_name)[0].toUpperCase(0) + String(field_name).slice(1)
+            },
+
+            formate_date_value_to_display(date_value) {
+                const date = new Date(date_value)
+                return date.toLocaleDateString()
             }
         }
     }

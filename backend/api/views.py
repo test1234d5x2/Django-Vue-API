@@ -32,13 +32,21 @@ def assignment_api(request, assignment_id):
         assignment.delete()
         return JsonResponse({})
     
-
-    # Update the data in the assignment variable.
-
     updatedData = json.loads(request.body)
 
-    for (field_name, value) in updatedData.items():
-        setattr(assignment, field_name, value)
+    if 'employee_id' in updatedData.keys():
+        updatedData['employee'] = updatedData.pop('employee_id', -1)
+    if 'project_id' in updatedData.keys():
+        updatedData['project'] = updatedData.pop('project_id', -1)
+    
+    form = AssignmentForm(updatedData)
+    if (form.is_valid()):
+        for (field_name, value) in updatedData.items():
+            setattr(assignment, field_name, value)
+
+        assignment.save()
+    else:
+        return JsonResponse({"data": {}})
 
     assignment.save()
 
@@ -54,9 +62,9 @@ def assignments_api(request):
         
         newData = json.loads(request.body)
 
-        if 'employee_id' in newData:
+        if 'employee_id' in newData.keys():
             newData['employee'] = newData.pop('employee_id', -1)
-        if 'project_id' in newData:
+        if 'project_id' in newData.keys():
             newData['project'] = newData.pop('project_id', -1)
 
         try:
@@ -66,6 +74,8 @@ def assignments_api(request):
         except FieldDoesNotExist:
             print("Entered Here")
             return incorrect_form_fields_message()
+        
+        print(newData)
         
         form = AssignmentForm(newData)
         if (form.is_valid()):

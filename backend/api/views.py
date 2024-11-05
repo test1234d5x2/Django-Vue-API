@@ -41,7 +41,7 @@ def assignment_api(request, assignment_id):
     
     form = AssignmentForm(updatedData)
     if (form.is_valid()):
-        for (field_name, value) in updatedData.items():
+        for (field_name, value) in form.cleaned_data.items():
             setattr(assignment, field_name, value)
 
         assignment.save()
@@ -50,10 +50,10 @@ def assignment_api(request, assignment_id):
 
     assignment.save()
 
-    assignment = Assignment.objects.filter(id=assignment).values()[0]
+    assignment = Assignment.objects.filter(id=assignment_id).values()[0]
     
     return JsonResponse({
-        "data": model_to_dict(assignment)
+        "data": assignment
     })
 
 

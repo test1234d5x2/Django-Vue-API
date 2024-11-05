@@ -16,7 +16,6 @@
             :headings="headings"
             :data="formatted_display_data"
             :deleteData="deleteData"
-            :toggleModal="toggleModal"
             :prepareEditForm="prepareEditForm"
 
         />
@@ -190,14 +189,13 @@
             },
 
             async saveChanges(form_data, valid, id=-1) {
-                console.log(form_data, id)
                 // Add Data
                 if (valid && this.mode == MODES['ADD']) {
                     await this.addData(form_data)
                 }
 
                 // Update Data
-                else if (valid && this.record_exists(id, this.displayed_model)) {
+                else if (valid && this.record_exists(id, this.displayed_model) && this.mode == MODES['EDIT']) {
                     await this.updateData(form_data, id)
                 }
 

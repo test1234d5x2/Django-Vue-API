@@ -43,10 +43,6 @@
                 type: Function,
                 required: true
             },
-            toggleModal: {
-                type: Function,
-                required: true
-            },
             prepareEditForm: {
                 type: Function,
                 required: true

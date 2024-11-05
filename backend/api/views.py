@@ -137,7 +137,7 @@ def project_api(request, project_id):
     form = ProjectForm(updatedData)
     
     if (form.is_valid()):
-        for (field_name, value) in updatedData.items():
+        for (field_name, value) in form.cleaned_data.items():
             setattr(project, field_name, value)
 
         project.save()
@@ -192,7 +192,7 @@ def employee_api(request, employee_id):
     form = EmployeeForm(updatedData)
     
     if (form.is_valid()):
-        for (field_name, value) in updatedData.items():
+        for (field_name, value) in form.cleaned_data.items():
             setattr(employee, field_name, value)
 
         employee.save()

@@ -73,7 +73,7 @@
             const data = await response.json()
             this.models_list = data['data']
 
-            for (const model of this.models_list) {                
+            for (const model of this.models_list) {
                 var response2 = await fetch(`${BASE_URL}/${model.toLowerCase()}sAPI`)
                 var data2 = await response2.json()
                 this.data_list[model] = data2['data']

@@ -214,7 +214,3 @@ def incorrect_form_fields_message():
     return JsonResponse({
         "message": "Incorrect set of form fields."
     })
-
-
-def process_field_name_to_text(name):
-    return str(name).replace("_", " ").title()

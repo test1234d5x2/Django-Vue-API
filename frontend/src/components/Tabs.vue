@@ -24,10 +24,6 @@
                 type: Array,
                 required: true
             },
-            changeTab: {
-                type: Function,
-                required: true
-            }
         },
     }
 

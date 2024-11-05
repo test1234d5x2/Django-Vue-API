@@ -47,16 +47,20 @@
         },
 
         methods: {
+
+            // Format the Object keys to be used as headings for the table
             format_field_to_text_display(field_name) {
                 field_name = String(field_name).replace("_", " ")
                 return field_name[0].toUpperCase(0) + field_name.slice(1)
             },
 
+            // Format dates for displaying
             formate_date_value_to_display(date_value) {
                 const date = new Date(date_value)
                 return date.toLocaleDateString()
             },
 
+            // Formats the raw data for display
             generateDisplayValue(key, value) {
                 if (value === true) return "Yes"
                 else if (value === false) return "No"

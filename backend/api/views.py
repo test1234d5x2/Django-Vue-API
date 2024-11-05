@@ -8,11 +8,6 @@ from .forms import EmployeeForm, ProjectForm, AssignmentForm
 from .models import Project, Employee, Assignment
 
 
-
-
-
-
-
 TYPE_MODEL_MAPPING = {
     "employee": Employee,
     "project": Project,
@@ -21,27 +16,29 @@ TYPE_MODEL_MAPPING = {
 
 
 def get_models(request):
+    """ Returns the name of the models. """
     return JsonResponse({"data": [str(model_name).title() for model_name in TYPE_MODEL_MAPPING.keys()]})
 
 
-
 def assignment_api(request, assignment_id):
+    """ Handles the removal and updating of a specific assignment. """
+
     assignment = Assignment.objects.get(id=assignment_id)
 
     if request.method == "DELETE":
         assignment.delete()
         return JsonResponse({})
     
-    updatedData = json.loads(request.body)
+    updated_data = json.loads(request.body)
 
-    if 'employee_id' in updatedData.keys():
-        updatedData['employee'] = updatedData.pop('employee_id', -1)
-    if 'project_id' in updatedData.keys():
-        updatedData['project'] = updatedData.pop('project_id', -1)
+    if 'employee_id' in updated_data.keys():
+        updated_data['employee'] = updated_data.pop('employee_id', -1)
+    if 'project_id' in updated_data.keys():
+        updated_data['project'] = updated_data.pop('project_id', -1)
     
-    form = AssignmentForm(updatedData)
-    if (form.is_valid()):
-        for (field_name, value) in form.cleaned_data.items():
+    form = AssignmentForm(updated_data)
+    if form.is_valid():
+        for field_name, value in form.cleaned_data.items():
             setattr(assignment, field_name, value)
 
         assignment.save()
@@ -58,34 +55,34 @@ def assignment_api(request, assignment_id):
 
 
 def assignments_api(request):
+    """ Handles the retrieval of all assignments and the addition of a new assignment. """
+
     if request.method == "POST":
         
-        newData = json.loads(request.body)
+        new_data = json.loads(request.body)
 
-        if 'employee_id' in newData.keys():
-            newData['employee'] = newData.pop('employee_id', -1)
-        if 'project_id' in newData.keys():
-            newData['project'] = newData.pop('project_id', -1)
+        if 'employee_id' in new_data.keys():
+            new_data['employee'] = new_data.pop('employee_id', -1)
+        if 'project_id' in new_data.keys():
+            new_data['project'] = new_data.pop('project_id', -1)
 
         try:
-            for key in newData.keys():
+            for key in new_data.keys():
                 print(Assignment._meta.get_field(key))
 
         except FieldDoesNotExist:
             print("Entered Here")
             return incorrect_form_fields_message()
-        
-        print(newData)
-        
-        form = AssignmentForm(newData)
-        if (form.is_valid()):
-            newRecord = Assignment.objects.create(**form.cleaned_data)
-            newRecord.save()
+                
+        form = AssignmentForm(new_data)
+        if form.is_valid():
+            new_record = Assignment.objects.create(**form.cleaned_data)
+            new_record.save()
             
-            newData = Assignment.objects.filter(id=newRecord.pk).values()[0]
+            new_data = Assignment.objects.filter(id=new_record.pk).values()[0]
 
             return JsonResponse({
-                "data": newData
+                "data": new_data
             })
         else:
             return JsonResponse({"data": {}})
@@ -97,26 +94,27 @@ def assignments_api(request):
     })    
 
 
-
 def projects_api(request):
+    """ Handles the retrieval of all projects and the addition of a new project. """
+
     if request.method == "POST":
         
-        newData = json.loads(request.body)
+        new_data = json.loads(request.body)
 
         try:
-            for key in newData.keys():
+            for key in new_data.keys():
                 print(Project._meta.get_field(key))
 
         except FieldDoesNotExist:
             print("Entered Here")
             return incorrect_form_fields_message()
         
-        form = ProjectForm(newData)
-        if (form.is_valid()):
-            newData = Project.objects.create(**newData)
-            newData.save()
+        form = ProjectForm(new_data)
+        if form.is_valid():
+            new_data = Project.objects.create(**new_data)
+            new_data.save()
             return JsonResponse({
-                "data": model_to_dict(newData, exclude=['employees'])
+                "data": model_to_dict(new_data, exclude=['employees'])
             })
         else:
             return JsonResponse({"data": {}})
@@ -127,17 +125,19 @@ def projects_api(request):
 
 
 def project_api(request, project_id):
+    """ Handles the removal or updating of a specific project. """
+
     project = Project.objects.get(id=project_id)
 
     if request.method == "DELETE":
         project.delete()
         return JsonResponse({})
     
-    updatedData = json.loads(request.body)
-    form = ProjectForm(updatedData)
+    updated_data = json.loads(request.body)
+    form = ProjectForm(updated_data)
     
-    if (form.is_valid()):
-        for (field_name, value) in form.cleaned_data.items():
+    if form.is_valid():
+        for field_name, value in form.cleaned_data.items():
             setattr(project, field_name, value)
 
         project.save()
@@ -151,14 +151,15 @@ def project_api(request, project_id):
     })
 
 
-
 def employees_api(request):
+    """ Handles the retrieval of all employees or the addition of a new employee. """
+
     if request.method == "POST":
 
-        newData = json.loads(request.body)
+        new_data = json.loads(request.body)
 
         try:
-            for key in newData.keys():
+            for key in new_data.keys():
                 print(Employee._meta.get_field(key))
 
         except FieldDoesNotExist:
@@ -166,12 +167,12 @@ def employees_api(request):
             return incorrect_form_fields_message()
         
 
-        form = EmployeeForm(newData)
-        if (form.is_valid()):
-            newData = Employee.objects.create(**newData)
-            newData.save()
+        form = EmployeeForm(new_data)
+        if form.is_valid():
+            new_data = Employee.objects.create(**new_data)
+            new_data.save()
             return JsonResponse({
-                "data": model_to_dict(newData)
+                "data": model_to_dict(new_data)
             })
         else:
             return JsonResponse({"data": {}})
@@ -182,17 +183,19 @@ def employees_api(request):
 
 
 def employee_api(request, employee_id):
+    """ Handles the updating or removal of a specific employee. """
+
     employee = Employee.objects.get(id=employee_id)
 
     if request.method == "DELETE":
         employee.delete()
         return JsonResponse({})
     
-    updatedData = json.loads(request.body)
-    form = EmployeeForm(updatedData)
+    updated_data = json.loads(request.body)
+    form = EmployeeForm(updated_data)
     
-    if (form.is_valid()):
-        for (field_name, value) in form.cleaned_data.items():
+    if form.is_valid():
+        for field_name, value in form.cleaned_data.items():
             setattr(employee, field_name, value)
 
         employee.save()
@@ -206,11 +209,11 @@ def employee_api(request, employee_id):
     })
 
 
-
-
 # Helper Functions
 
 def incorrect_form_fields_message():
+    """ Returns a message indicating that the form field set is incorrect. """
+
     return JsonResponse({
         "message": "Incorrect set of form fields."
     })

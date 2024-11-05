@@ -2,6 +2,8 @@ from django.db import models
 
 # Create your models here.
 class Employee(models.Model):
+    """ Stores data about an employee """
+
     name = models.CharField(max_length=30)
     surname = models.CharField(max_length=30)
     background = models.TextField()
@@ -11,6 +13,8 @@ class Employee(models.Model):
         return f"{self.name} {self.surname}"
 
 class Project(models.Model):
+    """ Stores data about a project """
+
     name = models.CharField(max_length=100)
     description = models.TextField()
     start_date = models.DateField()
@@ -20,6 +24,8 @@ class Project(models.Model):
         return f"{self.name}"
 
 class Assignment(models.Model):
+    """ Stores data about a project that has benn assigned to an employee """
+
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     role = models.CharField(max_length=100)

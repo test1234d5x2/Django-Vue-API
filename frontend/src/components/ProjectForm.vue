@@ -31,21 +31,28 @@
         },
 
         methods: {
+
+            // Validates the data entered in the form.
             validateForm() {
+
+                // Validate the project name
                 if (!this.form_data.name || this.form_data.name.trim().length === 0) {
                     window.alert("The project name field cannot be empty.")
                     return false
                 }
+
                 else if (this.form_data.name.length > 100) {
                     window.alert("The project name cannot be more than 100 characters.")
                     return false
                 }
 
+                // Validate the project description.
                 if (!this.form_data.description || this.form_data.description.trim().length === 0) {
                     window.alert("The project description must not be empty.")
                     return false
                 }
 
+                // Validate the project start date.
                 if (!this.form_data.start_date) {
                     window.alert("The project start date must be set.")
                     return false

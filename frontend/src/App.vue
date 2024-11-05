@@ -69,26 +69,33 @@
         },
 
         async mounted() {
+
+            // Fetch the list of models from the API
             const response = await fetch(`${BASE_URL}/getModels`)
             const data = await response.json()
             this.models_list = data['data']
 
+            // Iterate through each model and fetch its corresponding data
             for (const model of this.models_list) {
                 var response2 = await fetch(`${BASE_URL}/${model.toLowerCase()}sAPI`)
                 var data2 = await response2.json()
                 this.data_list[model] = data2['data']
             }
 
+            // Initialise the view by selecting the first tab
             this.changeTab(this.models_list[0])
         },
 
         methods: {
+
+            // Handles changing the tab being displayed.
             changeTab(name) {
                 this.displayed_model = name
                 this.processDisplayData()
                 this.updateHeadings()
             },
 
+            // Formats the data for display.
             processDisplayData() {
                 if (this.displayed_model === "Assignment") {
                     let assignmentsList = JSON.parse(JSON.stringify(this.data_list[this.displayed_model]))
@@ -113,10 +120,12 @@
                 }   
             },
 
+            // Sets the data to be edited
             setEditableData(record) {
                 this.form_data = JSON.parse(JSON.stringify(record))
             },
 
+            // Form for adding new data.
             prepareAddForm() {
                 this.setMode(MODES['ADD'])
                 this.setEditableData({})
@@ -125,6 +134,7 @@
                 this.toggleModal()
             },
 
+            // Form for editing new data.
             prepareEditForm(record) {
                 this.setMode(MODES['EDIT'])
                 this.setEditableData(record)
@@ -141,6 +151,7 @@
                 this.mode = mode
             },
 
+            // Removes data using the ID.
             async deleteData(id) {
                 if (confirm("Are you sure you want to delete this record?")) {
                     const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}API/${id}`, {
@@ -154,6 +165,7 @@
                 this.processDisplayData()
             },
 
+            // Adds data inputted in the form.
             async addData(form_data) {
                 const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}sAPI`, {
                     method: "POST",
@@ -172,6 +184,7 @@
                 this.data_list[this.displayed_model].push(data['data'])
             },
 
+            // Updates data selected from the table and edited in the form.
             async updateData(form_data, id) {
                 const response = await fetch(`${BASE_URL}/${this.displayed_model.toLowerCase()}API/${id}`, {
                     method: "PUT",
@@ -188,8 +201,10 @@
                 }
             },
 
+            // Saves changes made from adding new data or editing data.
             async saveChanges(form_data, valid, id=-1) {
 
+                // Invalid form data.
                 if (!valid) {
                     console.log("Invalid Form Submission.")
                     return
@@ -212,6 +227,7 @@
                 this.processDisplayData()
             },
 
+            // Checks if a record exists in the data list given its ID.
             record_exists(id, displayed_model) {
                 for (let record of this.data_list[displayed_model]) {
                     if (record['id'] === id) {
@@ -221,6 +237,7 @@
                 return false
             },
 
+            // Generates the list of headings for the table if there's data.
             updateHeadings() {
                 if (this.formatted_display_data.length > 0) {
                     this.headings = Object.keys(this.formatted_display_data[0])

@@ -36,10 +36,12 @@
         },
 
         methods: {
-            validateForm() {
 
+            // Validates the data entered in the form.
+            validateForm() {
                 let numberRE = /\d/
 
+                // Validate the employee name.
                 if (!this.form_data.name || this.form_data.name.trim().length === 0) {
                     window.alert("Name cannot be empty.")
                     return false
@@ -53,7 +55,7 @@
                     return false
                 }
 
-
+                 // Validate the employee surname.
                 if (!this.form_data.surname || this.form_data.surname.trim().length === 0) {
                     window.alert("Surname cannot be empty.")
                     return false
@@ -67,6 +69,7 @@
                     return false
                 }
 
+                // Validate the employee's background description.
                 if (!this.form_data.background || this.form_data.background.trim().length === 0) {
                     window.alert("Background cannot be empty.")
                     return false

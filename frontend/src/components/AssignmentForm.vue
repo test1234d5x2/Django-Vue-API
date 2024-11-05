@@ -48,7 +48,11 @@
         },
         
         methods: {
+
+            // Validates the data entered in the form.
             validateForm() {
+
+                // Check the employee chosen is a valid employee stored.
                 let employeeIdExists = false;
                 for (let i = 0; i < this.employeesList.length; i++) {
                     if (this.employeesList[i].id === parseInt(this.form_data.employee_id)) {
@@ -61,6 +65,7 @@
                     return false
                 }
 
+                // Check the project chosen is a valid project stored.
                 let projectIdExists = false;
                 for (let i = 0; i < this.projectsList.length; i++) {
                     if (this.projectsList[i].id === parseInt(this.form_data.project_id)) {
@@ -72,11 +77,13 @@
                     return false
                 }
 
+                // Validate the role given to the employee in the project.
                 if (!this.form_data.role || this.form_data.role.length > 100) {
                     window.alert("Role must not be greater than 100 characters")
                     return false
                 }
 
+                // Validate the weekly number of hours allocated to the employee in the project chosen.
                 if (isNaN(this.form_data.weekly_hours) || this.form_data.weekly_hours < 1 || this.form_data.weekly_hours > 40) {
                     window.alert("Weekly Hours must be between 1 and 40.")
                     return false

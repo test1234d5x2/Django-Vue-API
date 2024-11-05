@@ -54,6 +54,11 @@ def assignments_api(request):
         
         newData = json.loads(request.body)
 
+        if 'employee_id' in newData:
+            newData['employee'] = newData.pop('employee_id', -1)
+        if 'project_id' in newData:
+            newData['project'] = newData.pop('project_id', -1)
+
         try:
             for key in newData.keys():
                 print(Assignment._meta.get_field(key))

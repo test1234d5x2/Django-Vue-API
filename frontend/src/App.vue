@@ -151,6 +151,8 @@
                         this.data_list[this.displayed_model] = this.data_list[this.displayed_model].filter(element => element.id !== id)
                     }
                 }
+
+                this.processDisplayData()
             },
 
             async addData(form_data) {
@@ -202,6 +204,8 @@
                 else {
                     console.log("Failed Attempt To Save Changes.")
                 }
+
+                this.processDisplayData()
             },
 
             record_exists(id, displayed_model) {

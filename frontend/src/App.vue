@@ -9,7 +9,7 @@
         <Tabs
             :displayed_model="displayed_model"
             :models_list="models_list"
-            :changeTab="changeTab"
+            @change-tab="changeTab"
         />
 
         <InfoTable

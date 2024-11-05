@@ -30,12 +30,6 @@
             }
         },
 
-        data() {
-            return {
-                id: NaN
-            }
-        },
-
         methods: {
             validateForm() {
                 if (!this.form_data.name || this.form_data.name.trim().length === 0) {

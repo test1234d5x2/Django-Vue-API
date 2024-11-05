@@ -25,9 +25,9 @@
             :displayed_model="displayed_model"
             :employeesList="data_list['Employee']"
             :projectsList="data_list['Project']"
-            @save-changes="saveChanges"
             :mode="mode"
             :form_data="form_data"
+            @save-changes="saveChanges"
         />
 
     </div>
@@ -189,13 +189,19 @@
             },
 
             async saveChanges(form_data, valid, id=-1) {
+
+                if (!valid) {
+                    console.log("Invalid Form Submission.")
+                    return
+                }
+
                 // Add Data
-                if (valid && this.mode == MODES['ADD']) {
+                if (this.mode == MODES['ADD']) {
                     await this.addData(form_data)
                 }
 
                 // Update Data
-                else if (valid && this.record_exists(id, this.displayed_model) && this.mode == MODES['EDIT']) {
+                else if (this.record_exists(id, this.displayed_model) && this.mode == MODES['EDIT']) {
                     await this.updateData(form_data, id)
                 }
 

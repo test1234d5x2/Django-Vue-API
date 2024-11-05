@@ -46,12 +46,6 @@
                 required: true
             }
         },
-
-        data() {
-            return {
-                id: NaN,
-            }
-        },
         
         methods: {
             validateForm() {

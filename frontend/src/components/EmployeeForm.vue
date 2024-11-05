@@ -35,19 +35,13 @@
             }
         },
 
-        data() {
-            return {
-                id: NaN,
-            }
-        },
-
         methods: {
             validateForm() {
                 if (!this.form_data.name || this.form_data.name.trim().length === 0) {
                     window.alert("Name cannot be empty.")
                     return false
                 }
-                else if (this.form_data.length > 30) {
+                else if (this.form_data.name.length > 30) {
                     window.alert("Name must not be more than 30 characters.")
                     return false
                 }

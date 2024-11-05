@@ -15,10 +15,7 @@
         <tbody>
             <tr v-for="record in data">
                 <template v-for="(value, key) in record">
-                    <td v-if="value === true">Yes</td>
-                    <td v-else-if="value === false">No</td>
-                    <td v-else-if="key === 'start_date'">{{ formate_date_value_to_display(value) }}</td>
-                    <td v-else-if="!(key == 'id' || key == 'employee_id' || key == 'project_id')">{{ value }}</td>
+                    <td>{{ generateDisplayValue(key, value) }}</td>
                 </template>
                 <!-- <td><i class="bi bi-pencil-fill icons" @click="() => prepareEditForm(record)"></i></td> -->
                 <td><i class="bi bi-pencil-fill icons" @click="$emit('prepare-edit-form', record)"></i></td>
@@ -46,19 +43,26 @@
         methods: {
             format_field_to_text_display(field_name) {
                 field_name = String(field_name).replace("_", " ")
-                return String(field_name)[0].toUpperCase(0) + String(field_name).slice(1)
+                return field_name[0].toUpperCase(0) + field_name.slice(1)
             },
 
             formate_date_value_to_display(date_value) {
                 const date = new Date(date_value)
                 return date.toLocaleDateString()
+            },
+
+            generateDisplayValue(key, value) {
+                if (value === true) return "Yes"
+                else if (value === false) return "No"
+                else if (key === "start_date") return this.formate_date_value_to_display(value)
+                else return value
             }
         }
     }
 
 </script>
 
-<style>
+<style scoped>
 
     .icons {
         cursor: pointer;

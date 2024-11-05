@@ -20,8 +20,9 @@
                     <td v-else-if="key === 'start_date'">{{ formate_date_value_to_display(value) }}</td>
                     <td v-else-if="!(key == 'id' || key == 'employee_id' || key == 'project_id')">{{ value }}</td>
                 </template>
-                <td><i class="bi bi-pencil-fill icons" @click="() => prepareEditForm(record)"></i></td>
-                <td><i class="bi bi-trash icons" @click="() => deleteData(record['id'])"></i></td>
+                <!-- <td><i class="bi bi-pencil-fill icons" @click="() => prepareEditForm(record)"></i></td> -->
+                <td><i class="bi bi-pencil-fill icons" @click="$emit('prepare-edit-form', record)"></i></td>
+                <td><i class="bi bi-trash icons" @click="$emit('delete-data', record['id'])"></i></td>
             </tr>
         </tbody>
     </table>
@@ -38,14 +39,6 @@
             },
             data: {
                 type: Array,
-                required: true
-            },
-            deleteData: {
-                type: Function,
-                required: true
-            },
-            prepareEditForm: {
-                type: Function,
                 required: true
             }
         },

@@ -15,8 +15,8 @@
         <InfoTable
             :headings="headings"
             :data="formatted_display_data"
-            :deleteData="deleteData"
-            :prepareEditForm="prepareEditForm"
+            @delete-data="deleteData"
+            @prepare-edit-form="prepareEditForm"
 
         />
 

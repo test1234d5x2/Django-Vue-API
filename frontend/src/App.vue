@@ -16,8 +16,6 @@
             :headings="headings"
             :data="formatted_display_data"
             :deleteData="deleteData"
-            :setMode="setMode"
-            :setEditableData="setEditableData"
             :toggleModal="toggleModal"
             :prepareEditForm="prepareEditForm"
 
@@ -102,21 +100,14 @@
                             }
                         }
 
-
-
                         for (let project of this.data_list['Project']) {
                             if (project['id'] === record['project_id']) {
-                                console.log("Here")
                                 record['project'] = project['name']
                             }
                         }
-                        delete record['employee_id']
-                        delete record['project_id']
 
                         return record
                     })
-
-                    console.log(this.formatted_display_data)
                 }
                 else {
                     this.formatted_display_data = this.data_list[this.displayed_model]

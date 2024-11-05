@@ -4,7 +4,7 @@
         <thead>
             <tr>
                 <template v-for="heading in headings">
-                    <th v-if="heading != 'id'">
+                    <th v-if="!(heading == 'id' || heading == 'employee_id' || heading == 'project_id')">
                         <span>{{ format_field_to_text_display(heading) }}</span>
                     </th>
                 </template>
@@ -17,7 +17,7 @@
                 <template v-for="(value, key) in record">
                     <td v-if="value === true">Yes</td>
                     <td v-else-if="value === false">No</td>
-                    <td v-else-if="key != 'id'">{{ value }}</td>
+                    <td v-else-if="!(key == 'id' || key == 'employee_id' || key == 'project_id')">{{ value }}</td>
                 </template>
                 <td><i class="bi bi-pencil-fill icons" @click="() => prepareEditForm(record)"></i></td>
                 <td><i class="bi bi-trash icons" @click="() => deleteData(record['id'])"></i></td>
@@ -40,14 +40,6 @@
                 required: true
             },
             deleteData: {
-                type: Function,
-                required: true
-            },
-            setMode: {
-                type: Function,
-                required: true
-            },
-            setEditableData: {
                 type: Function,
                 required: true
             },
